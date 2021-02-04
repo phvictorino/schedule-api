@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Schedule } from '../../collections/schedule';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { CreateScheduleDTO } from './dtos/create-schedule.dto';
+import { SchedulesRepository } from './schedules.repository';
 
 @Injectable()
 export class SchedulesService {
-  constructor(
-    @InjectModel(Schedule.name)
-    private readonly scheduleModel: Model<Schedule>,
-  ) {}
+  constructor(private schedulesRepository: SchedulesRepository) {}
 
-  findAllSchedules(): Promise<Schedule[]> {
-    return this.scheduleModel.find().exec();
+  findAll(): Promise<Schedule[]> {
+    return this.schedulesRepository.findAll();
+  }
+
+  createSchedule(createDto: CreateScheduleDTO): Promise<Schedule> {
+    return this.schedulesRepository.create(createDto);
   }
 }
